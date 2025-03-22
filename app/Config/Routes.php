@@ -38,3 +38,6 @@ $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
 $routes->get('contact', 'Home::contact', ['filter' => 'auth']);
 
 $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
+
+$routes->post('transaksi/verifikasi', 'TransaksiController::verifikasi');
+

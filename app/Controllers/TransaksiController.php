@@ -12,6 +12,7 @@ class TransaksiController extends BaseController
     protected $apiKey = "2609cdde739a66f100ead56177316625";
     protected $transaction;
     protected $transaction_detail;
+    
 
 
     function __construct()
@@ -162,7 +163,7 @@ class TransaksiController extends BaseController
     }
 
     public function buy()
-{
+    {
     if ($this->request->getPost()) { 
         $dataForm = [
             'username' => $this->request->getPost('username'),
@@ -196,5 +197,16 @@ class TransaksiController extends BaseController
  
         return redirect()->to(base_url('profile'));
     }
-}
+    }
+
+    public function verifikasi()
+    {
+        $id_pembelian = $this->request->getPost('id_pembelian');
+
+        // Update status transaksi di database
+        $this->transaction->update($id_pembelian, ['status' => 1]);
+
+        // Redirect kembali dengan pesan sukses
+        return redirect()->back()->with('message', 'Pembelian berhasil diverifikasi!');
+    }
 }

@@ -13,7 +13,7 @@ History Transaksi Pembelian <strong><?= $username ?></strong>
                 <th scope="col">Total Bayar</th>
                 <th scope="col">Alamat</th>
                 <th scope="col">Status</th>
-                <th scope="col"></th>
+                <th scope="col">Aksi</th>
             </tr>
         </thead>
         <tbody>
@@ -29,9 +29,19 @@ History Transaksi Pembelian <strong><?= $username ?></strong>
                         <td><?php echo $item['alamat'] ?></td>
                         <td><?php echo ($item['status'] == "1") ? "Sudah Selesai" : "Belum Selesai" ?></td>
                         <td>
+                            <div class="d-flex align-items-center">
+                            <?php if ($item['status'] == "0") : ?>
+                                <form action="<?= base_url('transaksi/verifikasi') ?>" method="post" class="me-2">
+                                    <input type="hidden" name="id_pembelian" value="<?= $item['id'] ?>">
+                                    <button type="submit" class="btn btn-primary">
+                                        <i class="bi bi-check-lg"></i> <!-- Bootstrap check icon -->
+                                    </button>
+                                </form>
+                            <?php endif; ?>
                             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#detailModal-<?= $item['id'] ?>">
                                 Detail
                             </button>
+                        </div>
                         </td>
                     </tr>
                     <!-- Detail Modal Begin -->
