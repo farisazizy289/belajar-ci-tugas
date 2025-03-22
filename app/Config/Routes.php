@@ -12,6 +12,11 @@ $routes->get('login', 'AuthController::login');
 $routes->post('login', 'AuthController::login');
 $routes->get('logout', 'AuthController::logout');
 
+$routes->get('/register_view', 'AuthController::register_view');
+$routes->add('/register_view', 'AuthController::register_view');
+$routes->get('/register', 'AuthController::register');
+$routes->add('/register', 'AuthController::register');
+
 $routes->group('produk', ['filter' => 'auth'], function ($routes) {
     $routes->get('', 'ProdukController::index');
     $routes->post('', 'ProdukController::create');
@@ -38,6 +43,10 @@ $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
 $routes->get('contact', 'Home::contact', ['filter' => 'auth']);
 
 $routes->get('profile', 'Home::profile', ['filter' => 'auth']);
+
+$routes->add('/profile/edit/(:any)', 'ProfileController::edit/$1', ['filter' => 'auth']);
+$routes->get('/profile/edit_view/(:any)', 'ProfileController::edit_view/$1', ['filter' => 'auth']);
+$routes->get('/profile/(:any)', 'ProfileController::view/$1', ['filter' => 'auth']);
 
 $routes->post('transaksi/verifikasi', 'TransaksiController::verifikasi');
 

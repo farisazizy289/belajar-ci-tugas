@@ -11,6 +11,7 @@ class AuthController extends BaseController
 {
     protected $user;
 
+
     //function helper
     function __construct()
     {
@@ -20,21 +21,15 @@ class AuthController extends BaseController
 
     //function login
     public function login()
-{
-    if ($this->request->getPost()) {
-        $rules = [
-            'username' => 'required|min_length[6]',
-            'password' => 'required|min_length[7]|numeric',
-        ];
-
-        if ($this->validate($rules)) {
+    {
+        if ($this->request->getPost()) {
             $username = $this->request->getVar('username');
             $password = $this->request->getVar('password');
 
-            $dataUser = $this->user->where(['username' => $username])->first(); //pasw 1234567
+            $dataUser = $this->user->where(['username' => $username])->first();
 
             if ($dataUser) {
-                if (password_verify($password, $dataUser['password'])) {
+                if (md5($password) == $dataUser['password']) {
                     session()->set([
                         'username' => $dataUser['username'],
                         'role' => $dataUser['role'],
@@ -43,7 +38,7 @@ class AuthController extends BaseController
 
                     return redirect()->to(base_url('/'));
                 } else {
-                    session()->setFlashdata('failed', 'Kombinasi Username & Password Salah');
+                    session()->setFlashdata('failed', 'Username & Password Salah');
                     return redirect()->back();
                 }
             } else {
@@ -51,18 +46,45 @@ class AuthController extends BaseController
                 return redirect()->back();
             }
         } else {
-            session()->setFlashdata('failed', $this->validator->listErrors());
-            return redirect()->back();
+            return view('v_login');
         }
     }
 
-    return view('v_login');
-}
     //function logout
     public function logout()
     {
         session()->destroy();
         return redirect()->to('login');
+    }
+
+    //register
+    public function register_view()
+    {
+        return view('v_register');
+    }
+
+    public function register()
+    {
+        if ($this->request->getPost()) {
+            $username = $this->request->getVar('username');
+            $password = $this->request->getVar('password');
+
+            $dataUser = $this->user->where(['username' => $username])->first();
+
+            if ($dataUser) {
+                session()->setFlashdata('failed', 'Username Sudah Ada.');
+                return redirect()->back();
+            } else {
+                $newPassword = md5($password);
+                $sql = "INSERT into user (username,password,role) values ('$username', '$newPassword','guest')";
+        
+                $this->user->query($sql);
+
+                return view('v_login');
+            }
+        } else {
+            return view('v_register');
+        }
     }
 
     

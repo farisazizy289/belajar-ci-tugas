@@ -69,6 +69,8 @@ $password = [
                 </div>
 
                 <?= form_close() ?>
+
+                 <br>Belum punya akun? <a href="<?php echo base_url('/register_view') ?>">Register</a>
                 </div>
               </div>
 
